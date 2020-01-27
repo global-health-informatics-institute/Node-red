@@ -192,21 +192,20 @@ void setup() {
   server.begin();
 }
 
-void loop() {
-  
-server.handleClient();
+/*This function is calculating values from sensor */
+
+float readings(){
 // Clears the trigPin
-digitalWrite(trigPin, LOW);
-delayMicroseconds(2);
-
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
 // Sets the trigPin on HIGH state for 10 micro seconds
-digitalWrite(trigPin, HIGH);
-delayMicroseconds(10);
-digitalWrite(trigPin, LOW);
-//Reads the echoPin, returns the sound wave travel time in microseconds
-duration = pulseIn(echoPin, HIGH);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  //Reads the echoPin, returns the sound wave travel time in microseconds
+  duration = pulseIn(echoPin, HIGH);
 
-  // Convert the time into a distance
+// Convert the time into a distance
   distance = (duration/2) / 29.1;     // Divide by 29.1 or multiply by 0.0343
   heightofwater = initialdistance-distance;
   volume = heightofwater*3.142*8281; //calculating volume of water in tank (Pi * r * r * h)
@@ -217,28 +216,30 @@ duration = pulseIn(echoPin, HIGH);
   Serial.print(lvolume);
   Serial.print("L");
   Serial.println();
-
+  
   /* if client was disconnected then try to reconnect again */
   if (!client.connected()) {
     mqttconnect();
   }
-
-    /* this function will listen for incomming 
+  /* this function will listen for incomming 
   subscribed topic-process-invoke receivedCallback */
   client.loop();
+  return lvolume;
+}
 
+
+void loop() { 
+  server.handleClient();
    /* publish the first message */
-   snprintf(msg, 10,"%6.2f", lvolume);
+   snprintf(msg, 10,"%6.2f", readings());
    client.publish("ultra/readings",msg);
    delay(1000);
-
    /* publish the Second message */
-   snprintf(msg, 10,"%6.2f", lvolume);
+   snprintf(msg, 10,"%6.2f", readings());
    client.publish("ultra/readings",msg);
    delay(1000);
-
    /* publish the Third message */
-   snprintf(msg, 10,"%6.2f", lvolume);
+   snprintf(msg, 10,"%6.2f", readings());
    client.publish("ultra/readings",msg);
    delay(58000);
  
