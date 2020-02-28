@@ -2,21 +2,10 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-const char* ssid = "GHII-GS";
-const char* password = "winning1";
-const char* mqtt_server = "192.168.100.4";
+const char* ssid = "jessieka";
+const char* password = "12345678";
+const char* mqtt_server = "192.168.43.79";
 
-//set your Static IP Address
-IPAddress local_IP(192, 168, 100, 5);
-
-//set your Gateway IP Address
-IPAddress gateway(192, 168, 100, 1);
-
-//set your Subnet Mask
-IPAddress subnet(255, 255, 255, 0);
-
-IPAddress primaryDNS(8, 8, 8, 8);
-IPAddress secondaryDNS(8, 8, 4, 4);
 
 // defines pins
 const int trigPin = 5;
@@ -53,10 +42,6 @@ void mqttconnect() {
 
 void setup() {
 
-  //configures static IP Address
-  if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
-    Serial.println("STA Failed to configure");
-  }
   Serial.println(WiFi.localIP());
   // We start by connecting to a WiFi network
   Serial.println();
